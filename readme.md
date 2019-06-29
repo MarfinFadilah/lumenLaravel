@@ -1,3 +1,11 @@
+#NOTE
+Tes ini saya berhasil kerjakan membuat API menggunakan lumen laravel dengan authentikasi Auth0 di bagian checklist method sesuai dengan dokumentasi https://kw-checklist.docs.stoplight.io/api-reference/checklists/post-checklists
+- Create Checklist (Command: createChecklist)
+- Update Checklist (Command: updateChecklist/id example: updateChecklist/1 dan post jsonnya raw)
+- Delete Checklist (Command: deleteChecklist/id example: deleteChecklist/1)
+- Get Checklist (Command: getChecklist/id example: getChecklist/1)
+- Get List Of Checklist (Command: getChecklist)
+
 # Lumen PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
