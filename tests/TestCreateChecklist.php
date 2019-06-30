@@ -1,22 +1,49 @@
 <?php
 
-namespace App\Http\Controllers;
+use Laravel\Lumen\Testing\DatabaseMigrations;
+use Laravel\Lumen\Testing\DatabaseTransactions;
 
-use App\Author;
-use Illuminate\Http\Request;
-use PHPUnit\Framework\TestCase;
-
-class AuthorController extends Controller
+class ExampleTest extends TestCase
 {
-        public function create1(Request $request) {
-            $file = "anggota1.json";
-            $total = "total.txt";
-            if(!file_exists($file)){
-                $jsonfile = json_encode($request->json()->all(), JSON_PRETTY_PRINT);
-                $totalfile = json_encode(1, JSON_PRETTY_PRINT);
-                file_put_contents($file, $jsonfile);
-                file_put_contents($total, $totalfile);
-            } else {
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+
+    public function jsonProvider() {
+        return '{
+          "data": {
+            "attributes": {
+              "object_domain": "contact",
+              "object_id": "1",
+              "due": "2019-01-25T07:50:14+00:00",
+              "urgency": 1,
+              "description": "Need to verify this guy house.",
+              "items": [
+              "Visit his house",
+              "Capture a photo",
+              "Meet him on the house"
+              ],
+              "task_id": "123"
+          }
+      }
+  }';
+}
+
+/**
+     * @dataProvider jsonProvider
+     */
+
+public function testCreate1(Request $request) {
+    $file = "anggota1.json";
+    $total = "total.txt";
+    if(!file_exists($file)){
+        $jsonfile = json_encode($request->json()->all(), JSON_PRETTY_PRINT);
+        $totalfile = json_encode(1, JSON_PRETTY_PRINT);
+        file_put_contents($file, $jsonfile);
+        file_put_contents($total, $totalfile);
+    } else {
             /*$anggota = file_get_contents($file);
             $data = json_decode($anggota, true);
             array_push($data, $request->json()->all());
@@ -31,10 +58,19 @@ class AuthorController extends Controller
             file_put_contents($file, $jsonfile);
             file_put_contents($total, $totalfile);        
         }
-        return $jsonfile;
+        $this->assertEquals($jsonfile);
     }
 
-    public function get1($id) {
+
+    public function jsonId() {
+        return "1558";
+    }
+
+/**
+     * @dataProvider jsonId
+     */
+
+    public function testGet1($id) {
         $total = "total.txt";
         $totalfile = file_get_contents($total);
         $totalfile = json_decode($totalfile, true);
@@ -60,28 +96,14 @@ class AuthorController extends Controller
         //return response()->json(Author::all());
         }
         return "failed";
+        $this->assertEquals($str1);
     }
 
-    public function getAll() {
-        $total = "total.txt";
-        $totalfile = file_get_contents($total);
-        $totalfile = json_decode($totalfile, true);
-        $data = null; $str = ""; $str1 = ""; $crap = "";
-        for($i=1;$i<=$totalfile;$i++) {
-            $file = "anggota". $i . ".json";
-            if(file_exists($file)){
-                $anggota = file_get_contents($file);
-                $data = json_decode($anggota,true);
-                $str .= json_encode($data['data'], JSON_PRETTY_PRINT);
-            } else $totalfile++;
+/**
+     * @dataProvider jsonId
+     */
 
-        //return $str;
-        //return response()->json(Author::all());
-        }
-        return $str;
-    }
-
-    public function delete1($id) {
+    public function testDelete1($id) {
         $total = "total.txt";
         $totalfile = file_get_contents($total);
         $totalfile = json_decode($totalfile, true);
@@ -107,9 +129,33 @@ class AuthorController extends Controller
                 }
             } else $totalfile++;
         }
+        $this->assertEquals($id);
     }
 
-    public function update1($id, Request $request) {
+     public function jsonUpdate() {
+       return '1445, "data": {
+            "attributes": {
+              "object_domain": "contact",
+              "object_id": "1",
+              "due": "2019-01-25T07:50:14+00:00",
+              "urgency": 1,
+              "description": "Need to verify this guy house.",
+              "items": [
+              "Visit his house",
+              "Capture a photo",
+              "Meet him on the house"
+              ],
+              "task_id": "123"
+          }
+      }
+  }';
+   }
+
+/**
+     * @dataProvider jsonUpdate
+     */
+
+    public function testUpdate1($id, $request) {
         $total = "total.txt";
         $totalfile = file_get_contents($total);
         $totalfile = json_decode($totalfile, true);
@@ -135,4 +181,13 @@ class AuthorController extends Controller
         }
         return "id not found";
     }
+
+    /*public function testExample()
+    {
+        $this->get('/');
+
+        $this->assertEquals(
+            $this->app->version(), $this->response->getContent()
+        );
+    }*/
 }
